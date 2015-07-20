@@ -225,7 +225,9 @@ static void *KINWebBrowserContext = &KINWebBrowserContext;
             return YES;
         }
         else {
-            [self launchExternalAppWithURL:request.URL];
+            if([self.delegate respondsToSelector:@selector(webBrowser:didStartLoadingURL:)]) {
+                [self.delegate webBrowser:self didStartLoadingURL:request.URL];
+            }
             return NO;
         }
     }
@@ -313,7 +315,9 @@ static void *KINWebBrowserContext = &KINWebBrowserContext;
             }
         }
         else if([[UIApplication sharedApplication] canOpenURL:URL]) {
-            [self launchExternalAppWithURL:URL];
+            if([self.delegate respondsToSelector:@selector(webBrowser:didStartLoadingURL:)]) {
+                [self.delegate webBrowser:self didStartLoadingURL:URL];
+            }
             decisionHandler(WKNavigationActionPolicyCancel);
             return;
         }
